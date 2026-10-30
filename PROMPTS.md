@@ -161,3 +161,8 @@ Catat prompt penting selama membangun aplikasi: apa yang kamu minta, hasilnya, d
 **Prompt:** [SENDIRI] Kerjakan varian harga per produk.
 **Hasil:** Admin mengelola varian per produk; halaman detail menampilkan pilihan varian dengan harga dan stok, dan pesan WhatsApp memuat varian yang dipilih.
 **Perbaikan:** Varian habis dinonaktifkan di pilihan dan jumlah dibatasi stok varian.
+
+### US-50 Asisten AI dan chatbot melayang
+**Prompt:** [SENDIRI] Implementasikan asisten tanya jawab produk dengan model AI dan tambahkan chatbot asisten toko melayang di kiri bawah.
+**Hasil:** Kotak tanya jawab per produk di halaman detail dan widget chatbot melayang di pojok kiri bawah katalog publik. Keduanya memanggil model AI di server dengan konteks data produk dari Supabase, rate limit, dan pesan ramah yang mengarahkan pemesanan ke WhatsApp toko.
+**Perbaikan:** Widget otomatis disembunyikan pada area `/admin`, layout responsif pada layar HP 390 px, dan CSP disesuaikan dengan Google Fonts.
