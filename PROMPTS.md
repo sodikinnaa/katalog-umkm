@@ -91,3 +91,13 @@ Catat prompt penting selama membangun aplikasi: apa yang kamu minta, hasilnya, d
 **Prompt:** [SENDIRI] Kerjakan US-30, US-33, dan US-35 di halaman admin.
 **Hasil:** `/admin` menampilkan total produk dan jumlah per kategori, kolom cari dengan paginasi 20 per halaman di URL, serta tombol Ekspor CSV yang dibuat di server.
 **Perbaikan:** Endpoint ekspor memeriksa login sendiri (401 tanpa sesi) dan sel CSV di-escape termasuk perlindungan formula spreadsheet.
+
+### US-34 Validasi form admin di server
+**Prompt:** [SENDIRI] Kerjakan US-34 validasi form admin di server.
+**Hasil:** Server Action tambah dan ubah produk memvalidasi nama wajib dan harga bilangan bulat positif. Error tampil di bawah field yang salah.
+**Perbaikan:** Nilai yang sudah diisi dipertahankan saat validasi gagal.
+
+### US-13 PWA
+**Prompt:** [SENDIRI] Kerjakan US-13 PWA.
+**Hasil:** Menambahkan web app manifest dengan ikon 192 dan 512 dari `public/icons`, tautan manifest, theme color, dan metadata Apple web app.
+**Perbaikan:** Memakai fitur bawaan Next.js `app/manifest.js` tanpa paket tambahan.

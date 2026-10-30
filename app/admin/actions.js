@@ -63,31 +63,44 @@ export async function gantiPassword(formData) {
   redirect("/admin/password?status=berhasil");
 }
 
-export async function tambahProduk(formData) {
-  const supabase = await pastikanAdmin();
-  const nama = String(formData.get("nama") ?? "").trim();
-  const hargaRaw = formData.get("harga");
-  const harga = parseInt(hargaRaw, 10);
-  const kategori = String(formData.get("kategori") ?? "").trim();
-  const foto_url = String(formData.get("foto_url") ?? "").trim() || "/produk/kopi.svg";
-  const deskripsi = String(formData.get("deskripsi") ?? "").trim();
+function bacaProduk(formData) {
+  const nilai = {
+    nama: String(formData.get("nama") ?? "").trim(),
+    harga: String(formData.get("harga") ?? "").trim(),
+    kategori: String(formData.get("kategori") ?? "").trim(),
+    foto_url: String(formData.get("foto_url") ?? "").trim(),
+    deskripsi: String(formData.get("deskripsi") ?? "").trim(),
+  };
+  const errors = {};
+  const harga = Number(nilai.harga);
 
-  if (!nama || isNaN(harga) || harga < 0) {
-    redirect("/admin/produk/baru?error=invalid");
+  if (!nilai.nama) errors.nama = "Nama produk wajib diisi.";
+  if (!nilai.harga) errors.harga = "Harga wajib diisi.";
+  else if (!Number.isInteger(harga) || harga <= 0) errors.harga = "Harga harus berupa angka bulat positif.";
+
+  return { nilai, harga, errors };
+}
+
+export async function tambahProduk(_state, formData) {
+  const supabase = await pastikanAdmin();
+  const { nilai, harga, errors } = bacaProduk(formData);
+
+  if (Object.keys(errors).length > 0) {
+    return { errors, nilai };
   }
 
   const { error } = await supabase.from("produk").insert([
     {
-      nama,
+      nama: nilai.nama,
       harga,
-      kategori: kategori || null,
-      foto_url,
-      deskripsi: deskripsi || null,
+      kategori: nilai.kategori || null,
+      foto_url: nilai.foto_url || "/produk/kopi.svg",
+      deskripsi: nilai.deskripsi || null,
     },
   ]);
 
   if (error) {
-    throw new Error(`Gagal menambah produk: ${error.message}`);
+    return { errors: { form: "Produk gagal disimpan. Silakan coba lagi." }, nilai };
   }
 
   revalidatePath("/");
@@ -95,32 +108,28 @@ export async function tambahProduk(formData) {
   redirect("/admin");
 }
 
-export async function ubahProduk(id, formData) {
+export async function ubahProduk(id, _state, formData) {
   const supabase = await pastikanAdmin();
-  const nama = String(formData.get("nama") ?? "").trim();
-  const hargaRaw = formData.get("harga");
-  const harga = parseInt(hargaRaw, 10);
-  const kategori = String(formData.get("kategori") ?? "").trim();
-  const foto_url = String(formData.get("foto_url") ?? "").trim() || "/produk/kopi.svg";
-  const deskripsi = String(formData.get("deskripsi") ?? "").trim();
+  const { nilai, harga, errors } = bacaProduk(formData);
 
-  if (!id || !nama || isNaN(harga) || harga < 0) {
-    redirect(`/admin/produk/${id}/ubah?error=invalid`);
+  if (!id) errors.form = "Produk tidak ditemukan.";
+  if (Object.keys(errors).length > 0) {
+    return { errors, nilai };
   }
 
   const { error } = await supabase
     .from("produk")
     .update({
-      nama,
+      nama: nilai.nama,
       harga,
-      kategori: kategori || null,
-      foto_url,
-      deskripsi: deskripsi || null,
+      kategori: nilai.kategori || null,
+      foto_url: nilai.foto_url || "/produk/kopi.svg",
+      deskripsi: nilai.deskripsi || null,
     })
     .eq("id", id);
 
   if (error) {
-    throw new Error(`Gagal mengubah produk: ${error.message}`);
+    return { errors: { form: "Perubahan gagal disimpan. Silakan coba lagi." }, nilai };
   }
 
   revalidatePath("/");

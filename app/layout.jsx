@@ -7,6 +7,20 @@ export const metadata = {
   metadataBase: new URL(process.env.SITE_URL || "https://katalog-umkm-sodikina.vercel.app"),
   title: toko.nama,
   description: toko.tagline,
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: "/icons/icon-192.png",
+    apple: "/icons/icon-192.png",
+  },
+  appleWebApp: {
+    capable: true,
+    title: toko.nama,
+    statusBarStyle: "default",
+  },
+};
+
+export const viewport = {
+  themeColor: "#1f6b4f",
 };
 
 export default function RootLayout({ children }) {
