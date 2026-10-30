@@ -6,11 +6,14 @@ import { usePathname } from "next/navigation";
 const SAPAAN = "Halo! Saya asisten E-Craf UMKM. Saya bisa membantu mencari produk, mengecek harga dan stok, atau menjelaskan cara pemesanan.";
 const CONTOH = ["Ada produk apa saja?", "Rekomendasikan oleh-oleh", "Bagaimana cara memesan?"];
 
-function IkonChat() {
+function IkonRobot() {
   return (
-    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-6 w-6 fill-none stroke-current" strokeWidth="2">
-      <path d="M21 12a8 8 0 0 1-8 8H6l-4 2 1.5-4A9 9 0 1 1 21 12Z" />
-      <path d="M8 12h.01M12 12h.01M16 12h.01" strokeLinecap="round" />
+    <svg viewBox="0 0 24 24" aria-hidden="true" className="h-7 w-7 fill-none stroke-current" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="11" width="18" height="10" rx="2" />
+      <circle cx="12" cy="5" r="2" />
+      <path d="M12 7v4" />
+      <line x1="8" y1="16" x2="8.01" y2="16" />
+      <line x1="16" y1="16" x2="16.01" y2="16" />
     </svg>
   );
 }
@@ -69,13 +72,13 @@ export default function ChatbotMelayang() {
   }
 
   return (
-    <div className="fixed bottom-4 left-4 z-50 sm:bottom-6 sm:left-6">
+    <div className="fixed bottom-4 right-4 z-50 sm:bottom-6 sm:right-6">
       {terbuka && (
         <section
           role="dialog"
           aria-modal="false"
           aria-labelledby="judul-chatbot"
-          className="mb-3 flex h-[min(32rem,calc(100vh-7rem))] w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-garis bg-latar shadow-2xl"
+          className="mb-3 flex h-[min(32rem,calc(100vh-7rem))] w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-garis bg-latar shadow-2xl sm:ml-auto"
         >
           <header className="flex items-center justify-between gap-3 bg-utama px-4 py-3 text-white">
             <div>
@@ -163,7 +166,7 @@ export default function ChatbotMelayang() {
         aria-expanded={terbuka}
         className="flex h-14 w-14 items-center justify-center rounded-full bg-utama text-white shadow-xl transition-transform hover:scale-105 hover:bg-utama-gelap focus:outline-none focus:ring-4 focus:ring-utama/30"
       >
-        {terbuka ? <span aria-hidden="true" className="text-2xl">×</span> : <IkonChat />}
+        {terbuka ? <span aria-hidden="true" className="text-2xl">×</span> : <IkonRobot />}
       </button>
     </div>
   );
