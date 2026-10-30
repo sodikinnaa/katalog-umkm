@@ -1,5 +1,5 @@
 import Link from "next/link";
-import TombolModeGelap from "@/components/TombolModeGelap";
+import NavigasiUtama from "@/components/NavigasiUtama";
 import { ambilPengaturanToko } from "@/lib/pengaturan-toko";
 
 export default async function Header() {
@@ -11,18 +11,7 @@ export default async function Header() {
         <Link href="/" className="text-lg font-extrabold tracking-tight text-utama">
           {toko.nama}
         </Link>
-        <nav className="flex flex-wrap items-center justify-end gap-3 text-sm font-semibold" aria-label="Navigasi utama">
-          <Link href="/keranjang" className="hover:text-utama">
-            Keranjang
-          </Link>
-          <Link href="/bandingkan" className="hover:text-utama">
-            Bandingkan
-          </Link>
-          <Link href="/favorit" className="hover:text-utama">
-            Favorit
-          </Link>
-          <TombolModeGelap />
-        </nav>
+        <NavigasiUtama />
       </div>
     </header>
   );
