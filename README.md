@@ -83,6 +83,7 @@ Variabel tambahan untuk fitur AI (US-14 dan US-50): `ENDPOINT`, `API_KEY`, dan `
 - **Nama usaha:** E-Craf UMKM
 - **Pembuat:** Sodikin
 - **Link aplikasi:** https://katalog-umkm-sodikina.vercel.app
+- **Tangkapan layar:** Dokumentasi visual 23 halaman aplikasi lengkap (desktop dan mobile) tersedia di [docs/screenshots/README.md](./docs/screenshots/README.md).
 - **Katalog produk aktif:** 61 produk dalam 7 kategori (Bumbu, Camilan, Kain, Kerajinan, Kue kering, Minuman, dan kategori kustom) dengan 60 foto produk yang di-host di Supabase Storage publik.
 - **Pemesanan:** Langsung via tautan WhatsApp resmi dengan pesan otomatis yang merangkum nama produk, varian, jumlah, dan total harga.
 - **Fitur wajib (US-01 sampai US-06):** Katalog dari Supabase server-side, detail produk dinamis, tombol pesan WhatsApp, login admin berbasis cookie dan Supabase Auth, ganti password admin dengan validasi server, serta proteksi seluruh rute admin via `proxy.js`.
