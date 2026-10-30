@@ -1,9 +1,11 @@
+import BannerPromo from "@/components/BannerPromo";
 import FilterKatalog from "@/components/FilterKatalog";
 import KartuProduk from "@/components/KartuProduk";
 import KatalogTersimpan from "@/components/KatalogTersimpan";
 import Paginasi from "@/components/Paginasi";
 import { supabasePublik } from "@/lib/supabase/server";
-import { toko } from "@/lib/toko";
+import { pesanMigrasi } from "@/lib/produk";
+import { ambilPengaturanToko } from "@/lib/pengaturan-toko";
 
 export const dynamic = "force-dynamic";
 
@@ -32,20 +34,19 @@ export default async function HalamanKatalog({ searchParams }) {
   const urut = URUTAN[ambilTeks(params.urut)] ? ambilTeks(params.urut) : "terbaru";
   const halamanDiminta = Math.max(1, Number.parseInt(ambilTeks(params.halaman), 10) || 1);
   const supabase = supabasePublik();
+  const toko = await ambilPengaturanToko();
 
   const [hasilKategori, hasilJumlah] = await Promise.all([
-    supabase.from("produk").select("kategori"),
-    terapkanFilter(supabase.from("produk").select("id", { count: "exact", head: true }), q, kategori),
+    supabase.from("kategori").select("nama").order("nama"),
+    terapkanFilter(supabase.from("produk").select("id", { count: "exact", head: true }).eq("aktif", true), q, kategori),
   ]);
 
-  const error = hasilKategori.error || hasilJumlah.error;
-  if (error) {
-    throw new Error(`Gagal mengambil produk: ${error.message}`);
+  const galat = pesanMigrasi(hasilKategori.error || hasilJumlah.error);
+  if (galat) {
+    return <p role="alert" className="my-10 rounded-lg border border-garis bg-permukaan px-4 py-6 text-center text-bahaya">{galat}</p>;
   }
 
-  const daftarKategori = [...new Set(hasilKategori.data.map((baris) => baris.kategori).filter(Boolean))].sort(
-    (a, b) => a.localeCompare(b, "id")
-  );
+  const daftarKategori = hasilKategori.data.map((baris) => baris.nama);
   const totalProduk = hasilJumlah.count ?? 0;
   const jumlahHalaman = Math.max(1, Math.ceil(totalProduk / PER_HALAMAN));
   const halaman = Math.min(halamanDiminta, jumlahHalaman);
@@ -54,13 +55,15 @@ export default async function HalamanKatalog({ searchParams }) {
 
   let daftarProduk = [];
   if (totalProduk > 0) {
-    const hasil = await terapkanFilter(supabase.from("produk").select("id, nama, harga, foto_url, kategori"), q, kategori)
-      .order(kolom, { ascending })
+    const hasil = await terapkanFilter(supabase.from("produk").select("id, nama, harga, harga_diskon, foto_url, kategori, stok, badge, aktif, urutan").eq("aktif", true), q, kategori)
+      .order(urut === "terbaru" ? "urutan" : kolom, { ascending: urut === "terbaru" ? true : ascending })
+      .order(urut === "terbaru" ? "created_at" : "urutan", { ascending: urut === "terbaru" ? false : true })
       .order("id", { ascending: true })
       .range(awal, awal + PER_HALAMAN - 1);
 
-    if (hasil.error) {
-      throw new Error(`Gagal mengambil produk: ${hasil.error.message}`);
+    const galatDaftar = pesanMigrasi(hasil.error);
+    if (galatDaftar) {
+      return <p role="alert" className="my-10 rounded-lg border border-garis bg-permukaan px-4 py-6 text-center text-bahaya">{galatDaftar}</p>;
     }
     daftarProduk = hasil.data;
   }
@@ -77,6 +80,7 @@ export default async function HalamanKatalog({ searchParams }) {
         <p className="mt-4 text-sm text-teks-lembut">{toko.jamBuka}</p>
       </section>
 
+      <BannerPromo />
       <KatalogTersimpan mode="ringkasan" />
 
       <section aria-labelledby="judul-produk" className="flex flex-col gap-5">

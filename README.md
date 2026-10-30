@@ -72,9 +72,15 @@ Urutan yang disarankan: US-01, US-02, US-03, US-04, US-05, US-06, lalu fitur bon
 2. Lengkapi bagian di bawah ini.
 3. Push perubahan terakhir sebelum batas waktu.
 
+## Migrasi fitur lanjutan
+
+Fitur bonus US-18 sampai US-48 membutuhkan tabel tambahan. Jalankan `docs/migrations/000_all_features.sql` sekali di Supabase SQL Editor, atau file `001` sampai `009` secara berurutan. Penjelasan dan SQL verifikasi ada di `docs/migrations/README.md`.
+
+Variabel tambahan untuk fitur AI (US-14 dan US-50): `ENDPOINT`, `API_KEY`, dan `AI_MODEL` (lihat `.env.example`). Semuanya hanya dipakai di server.
+
 ## Tentang aplikasi ini
 
-- **Nama usaha:**
-- **Pembuat:**
-- **Link aplikasi:**
-- **Fitur bonus yang dikerjakan:**
+- **Nama usaha:** E-Craf UMKM
+- **Pembuat:** Sodikin
+- **Link aplikasi:** https://katalog-umkm-sodikina.vercel.app
+- **Fitur bonus yang dikerjakan:** US-07 sampai US-50: CRUD produk, pencarian/filter/urut/paginasi, jumlah dan varian di pesan WhatsApp, PWA, deskripsi AI, produk terkait, galeri foto, stok, harga coret dan badge, keranjang, halaman Tentang, bagikan, favorit, mode gelap, SEO dan Open Graph, sitemap/robots, 404 dan loading, upload foto ke Storage, dashboard, kelola kategori, aktif/nonaktif, cari dan paginasi admin, validasi server, ekspor dan impor CSV, terakhir dilihat, bandingkan produk, ulasan dan moderasi, catat klik WhatsApp dan produk terlaris, banner promo, pengaturan toko, kelola admin, log aktivitas, urutan tampil, halaman kategori, dan asisten AI produk.

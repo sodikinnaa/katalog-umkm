@@ -25,6 +25,13 @@ export async function proxy(request) {
     return NextResponse.redirect(new URL("/admin/login", request.url));
   }
 
+  if (user && request.nextUrl.pathname !== "/admin/login") {
+    const { data: profil, error } = await supabase.from("admin_profile").select("aktif").eq("user_id", user.id).maybeSingle();
+    if (!error && !profil?.aktif) {
+      return NextResponse.redirect(new URL("/admin/login?error=nonaktif", request.url));
+    }
+  }
+
   return response;
 }
 

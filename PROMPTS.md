@@ -121,3 +121,43 @@ Catat prompt penting selama membangun aplikasi: apa yang kamu minta, hasilnya, d
 **Prompt:** [SENDIRI] Kerjakan halaman khusus per kategori dan tautkan kategori dari kartu produk.
 **Hasil:** `/kategori/[slug]` mengambil produk kategori secara server-side, kategori kosong menampilkan halaman tidak ditemukan, dan kategori pada kartu/detail tertaut.
 **Perbaikan:** Segmen kategori di-encode dan di-decode agar nama yang mengandung spasi tetap valid.
+
+### Migrasi database fitur lanjutan
+**Prompt:** [SENDIRI] Buat migration per file untuk semua fitur database tersisa tanpa mengubah `docs/schema.sql`.
+**Hasil:** `docs/migrations/001` sampai `009` (plus gabungan `000_all_features.sql`) menambah stok, diskon, badge, aktif, urutan, tabel kategori, foto produk, varian, ulasan, klik WhatsApp, banner, pengaturan toko, profil admin, log aktivitas, dan rate limit. Semua tabel memakai RLS.
+**Perbaikan:** Produk lama diberi stok awal 10 agar katalog tidak tampil habis; policy admin dibatasi ke profil admin aktif.
+
+### US-14 dan US-50 Deskripsi dan asisten AI
+**Prompt:** [SENDIRI] Pakai `ENDPOINT`, `API_KEY`, `AI_MODEL` dari env untuk deskripsi otomatis dan tanya jawab produk.
+**Hasil:** Tombol "Buat deskripsi dengan AI" di form admin mengisi deskripsi dari nama dan kategori. Kotak tanya di detail produk menjawab hanya dari data produk lewat Route Handler server.
+**Perbaikan:** Panjang pertanyaan 3–300 karakter, timeout 15 detik, batas kiriman per pengunjung lewat RPC `ambil_jatah_kiriman`, kunci tidak pernah ke browser.
+
+### US-18, US-19, US-20, US-29, US-31, US-32, US-47 Produk lanjutan
+**Prompt:** [SENDIRI] Kerjakan galeri, stok, diskon/badge, upload foto ke Storage, kelola kategori, aktif/nonaktif, dan urutan tampil.
+**Hasil:** Form admin memakai select kategori dari tabel, input stok, diskon, badge, dan upload beberapa foto ke bucket `produk`. Tabel admin punya tombol aktif/nonaktif dan naik/turun urutan. Katalog publik menyembunyikan produk nonaktif, menandai "Habis", dan menampilkan harga coret serta badge.
+**Perbaikan:** Validasi MIME, magic bytes, dan ukuran file 5 MB; file dihapus jika simpan database gagal; kategori yang dipakai produk tidak bisa dihapus.
+
+### US-21 dan US-37 Keranjang dan bandingkan
+**Prompt:** [SENDIRI] Kerjakan keranjang dengan pesan semua via WhatsApp dan perbandingan dua produk.
+**Hasil:** Keranjang di localStorage dengan ubah jumlah, hapus, total, dan satu tombol WhatsApp untuk semua item. Halaman `/bandingkan` menampilkan dua produk berdampingan dari database.
+**Perbaikan:** Data tersimpan divalidasi ulang saat dibaca; memilih produk ketiga menggantikan pilihan lama.
+
+### US-38, US-39, US-40, US-41 Ulasan dan analitik WhatsApp
+**Prompt:** [SENDIRI] Kerjakan ulasan dengan moderasi admin dan pencatatan klik WhatsApp serta produk terlaris.
+**Hasil:** Form ulasan dengan honeypot dan batas kiriman, daftar ulasan dan rata-rata rating, halaman moderasi admin. Klik WhatsApp dicatat lewat `sendBeacon` tanpa data pribadi; dashboard admin menampilkan 5 produk terlaris.
+**Perbaikan:** Ulasan tersembunyi tidak dihitung dalam rata-rata.
+
+### US-42 dan US-43 Banner dan pengaturan toko
+**Prompt:** [SENDIRI] Kerjakan banner promo dan pengaturan toko dari admin.
+**Hasil:** Admin membuat/mengubah/menonaktifkan banner; beranda menampilkan banner aktif. Nama, nomor WhatsApp, alamat, dan jam buka diambil dari database dengan `lib/toko.js` sebagai cadangan.
+**Perbaikan:** Nomor WhatsApp dinormalisasi ke format internasional dan tautan banner hanya menerima http/https atau path relatif.
+
+### US-44, US-45, US-46 Kelola admin, log, impor CSV
+**Prompt:** [SENDIRI] Kerjakan kelola akun admin, log aktivitas, dan impor produk dari CSV.
+**Hasil:** Admin bisa menambah, menonaktifkan, dan menghapus admin lain tetapi bukan dirinya sendiri. Semua aksi admin dicatat dan 50 log terakhir tampil. Impor CSV memvalidasi tiap baris dan menampilkan ringkasan berhasil/gagal.
+**Perbaikan:** Proxy dan Server Action menolak admin nonaktif; parser CSV menangani tanda kutip dan baris baru tanpa paket tambahan.
+
+### US-48 Varian harga
+**Prompt:** [SENDIRI] Kerjakan varian harga per produk.
+**Hasil:** Admin mengelola varian per produk; halaman detail menampilkan pilihan varian dengan harga dan stok, dan pesan WhatsApp memuat varian yang dipilih.
+**Perbaikan:** Varian habis dinonaktifkan di pilihan dan jumlah dibatasi stok varian.

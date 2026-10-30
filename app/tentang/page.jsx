@@ -1,11 +1,17 @@
-import { toko } from "@/lib/toko";
+import { ambilPengaturanToko } from "@/lib/pengaturan-toko";
 
-export const metadata = {
-  title: `Tentang | ${toko.nama}`,
-  description: `Profil dan kontak ${toko.nama}`,
-};
+export const dynamic = "force-dynamic";
 
-export default function HalamanTentang() {
+export async function generateMetadata() {
+  const toko = await ambilPengaturanToko();
+  return {
+    title: `Tentang | ${toko.nama}`,
+    description: `Profil dan kontak ${toko.nama}`,
+  };
+}
+
+export default async function HalamanTentang() {
+  const toko = await ambilPengaturanToko();
   const tautanWhatsApp = `https://wa.me/${toko.nomorWhatsApp}`;
 
   return (

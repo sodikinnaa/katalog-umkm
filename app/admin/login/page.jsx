@@ -5,6 +5,7 @@ import { login } from "@/app/admin/actions";
 const pesanError = {
   kosong: "Email dan password wajib diisi.",
   salah: "Email atau password salah.",
+  nonaktif: "Akun admin tidak aktif. Hubungi admin utama.",
 };
 
 export default async function HalamanLogin({ searchParams }) {

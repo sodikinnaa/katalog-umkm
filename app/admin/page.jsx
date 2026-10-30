@@ -1,7 +1,9 @@
 import NavAdmin from "@/components/NavAdmin";
 import TabelProduk from "@/components/TabelProduk";
+import ProdukTerlaris from "@/components/ProdukTerlaris";
 import Tombol from "@/components/Tombol";
 import { supabaseSesi } from "@/lib/supabase/server";
+import { pesanMigrasi } from "@/lib/produk";
 
 export const dynamic = "force-dynamic";
 
@@ -29,19 +31,25 @@ export default async function HalamanAdmin({ searchParams }) {
 
   let query = supabase
     .from("produk")
-    .select("id, nama, harga, foto_url, kategori", { count: "exact" })
+    .select("id, nama, harga, harga_diskon, foto_url, kategori, stok, badge, aktif, urutan", { count: "exact" })
+    .order("urutan", { ascending: true })
     .order("created_at", { ascending: false })
+    .order("id", { ascending: true })
     .range(dari, dari + PER_HALAMAN - 1);
   if (q) query = query.ilike("nama", polaCari(q));
 
   const [daftar, ringkasan] = await Promise.all([query, supabase.from("produk").select("kategori")]);
 
-  if (daftar.error && daftar.error.code !== "PGRST103") {
-    throw new Error(`Gagal mengambil produk: ${daftar.error.message}`);
+  const galat = pesanMigrasi((daftar.error?.code !== "PGRST103" && daftar.error) || ringkasan.error);
+  if (galat) {
+    return (
+      <div className="flex flex-col gap-6 py-8">
+        <NavAdmin />
+        <p role="alert" className="rounded-2xl border border-garis bg-permukaan p-6 font-semibold text-bahaya">{galat}</p>
+      </div>
+    );
   }
-  if (ringkasan.error) {
-    throw new Error(`Gagal mengambil ringkasan: ${ringkasan.error.message}`);
-  }
+  const status = typeof sp?.status === "string" ? sp.status : "";
 
   const daftarProduk = daftar.error ? [] : daftar.data || [];
   const jumlahHasil = daftar.count ?? 0;
@@ -78,9 +86,12 @@ export default async function HalamanAdmin({ searchParams }) {
         </div>
       </section>
 
+      <ProdukTerlaris />
+
       <div className="flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-extrabold">Produk</h1>
         <div className="flex flex-wrap gap-2">
+          <Tombol href="/admin/kategori" varian="garis">Kelola kategori</Tombol>
           <a
             href="/admin/ekspor"
             download
@@ -91,6 +102,12 @@ export default async function HalamanAdmin({ searchParams }) {
           <Tombol href="/admin/produk/baru">Tambah produk</Tombol>
         </div>
       </div>
+
+      {status.startsWith("gagal") && (
+        <p role="alert" className="rounded-2xl border border-garis bg-permukaan p-4 text-sm font-semibold text-bahaya">
+          Aksi gagal dijalankan. Pastikan migrasi 001 sampai 003 sudah diterapkan, lalu coba lagi.
+        </p>
+      )}
 
       <form method="get" action="/admin" role="search" className="flex flex-wrap items-end gap-2">
         <label className="flex min-w-0 flex-1 flex-col gap-1.5 text-sm font-semibold">
