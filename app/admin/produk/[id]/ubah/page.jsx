@@ -1,24 +1,35 @@
 import { notFound } from "next/navigation";
 import NavAdmin from "@/components/NavAdmin";
 import FormProduk from "@/components/FormProduk";
-import CatatanBelumAktif from "@/components/CatatanBelumAktif";
-import { cariProdukContoh } from "@/lib/data-contoh";
+import { supabasePublik } from "@/lib/supabase/server";
+import { ubahProduk } from "@/app/admin/actions";
 
-// US-09 (bonus di jalur offline): ubah produk.
-export default async function HalamanUbahProduk({ params }) {
+export default async function HalamanUbahProduk({ params, searchParams }) {
   const { id } = await params;
-  const produk = cariProdukContoh(id);
+  const { error: errorQuery } = await searchParams;
 
-  if (!produk) {
+  const { data: produk, error } = await supabasePublik()
+    .from("produk")
+    .select("id, nama, harga, deskripsi, foto_url, kategori")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error || !produk) {
     notFound();
   }
+
+  const ubahProdukDenganId = ubahProduk.bind(null, produk.id);
 
   return (
     <div className="flex flex-col gap-6 py-8">
       <NavAdmin />
       <h1 className="text-2xl font-extrabold">Ubah produk</h1>
-      <CatatanBelumAktif>Simpan perubahan belum berfungsi: lihat US-09.</CatatanBelumAktif>
-      <FormProduk produk={produk} labelTombol="Simpan perubahan" />
+      {errorQuery && (
+        <p role="alert" className="text-sm font-semibold text-bahaya">
+          Data tidak valid. Pastikan nama dan harga terisi dengan benar.
+        </p>
+      )}
+      <FormProduk produk={produk} action={ubahProdukDenganId} labelTombol="Simpan perubahan" />
     </div>
   );
 }

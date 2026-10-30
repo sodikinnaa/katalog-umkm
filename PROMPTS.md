@@ -52,4 +52,22 @@ Catat prompt penting selama membangun aplikasi: apa yang kamu minta, hasilnya, d
 
 ## Debugging dan fitur bonus
 
-Tambahkan bagian baru untuk setiap error yang kamu perbaiki atau fitur bonus yang kamu kerjakan.
+### US-07 List Produk Admin dari Database
+**Prompt:** [SENDIRI] Implementasikan US-07 list produk di admin dari database Supabase.
+**Hasil:** Halaman `/admin` mengambil daftar produk riil dari tabel `produk` Supabase secara server-side dan menghapus dependensi pada `data-contoh.js`.
+**Perbaikan:** Menghapus komponen `CatatanBelumAktif` dan mengganti data contoh dengan query dinamis database.
+
+### US-08 Tambah Produk
+**Prompt:** [SENDIRI] Implementasikan US-08 tambah produk di admin dengan proteksi auth server.
+**Hasil:** Halaman `/admin/produk/baru` memproses form penambahan produk ke database Supabase melalui Server Action `tambahProduk` yang terproteksi auth admin.
+**Perbaikan:** Memberikan validasi nama dan harga positif serta pesan error jika input invalid.
+
+### US-09 Ubah Produk
+**Prompt:** [SENDIRI] Implementasikan US-09 ubah produk di admin.
+**Hasil:** Halaman `/admin/produk/[id]/ubah` mengambil data lama dari Supabase dan menyimpan perubahannya melalui Server Action `ubahProduk`.
+**Perbaikan:** Melakukan bind ID produk ke Server Action dan merevalidasi cache halaman setelah perubahan berhasil.
+
+### US-10 Hapus Produk
+**Prompt:** [SENDIRI] Implementasikan US-10 hapus produk dengan konfirmasi.
+**Hasil:** Menambahkan tombol hapus dengan konfirmasi dialog browser di tabel produk admin yang mengeksekusi Server Action `hapusProduk`.
+**Perbaikan:** Aksi hapus terlindungi sesi admin dan langsung memperbarui tampilan tabel setelah dihapus.

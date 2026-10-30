@@ -1,5 +1,6 @@
 import { formatRupiah } from "@/lib/format";
 import Tombol from "@/components/Tombol";
+import TombolHapusProduk from "@/components/TombolHapusProduk";
 
 export default function TabelProduk({ daftarProduk }) {
   return (
@@ -32,9 +33,7 @@ export default function TabelProduk({ daftarProduk }) {
                   <Tombol href={`/admin/produk/${produk.id}/ubah`} varian="garis">
                     Ubah
                   </Tombol>
-                  <Tombol type="button" varian="bahaya">
-                    Hapus
-                  </Tombol>
+                  <TombolHapusProduk id={produk.id} nama={produk.nama} />
                 </div>
               </td>
             </tr>
