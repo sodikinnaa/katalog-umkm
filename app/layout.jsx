@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import { toko } from "@/lib/toko";
 
 export const metadata = {
+  metadataBase: new URL(process.env.SITE_URL || "https://katalog-umkm-sodikina.vercel.app"),
   title: toko.nama,
   description: toko.tagline,
 };

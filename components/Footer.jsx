@@ -10,9 +10,14 @@ export default function Footer() {
           <p>{toko.alamat}</p>
           <p>{toko.jamBuka}</p>
         </div>
-        <Link href="/admin" className="self-start underline underline-offset-4 hover:text-utama">
-          Masuk sebagai admin
-        </Link>
+        <nav aria-label="Tautan footer" className="flex flex-col gap-2 self-start">
+          <Link href="/tentang" className="underline underline-offset-4 hover:text-utama">
+            Tentang toko
+          </Link>
+          <Link href="/admin" className="underline underline-offset-4 hover:text-utama">
+            Masuk sebagai admin
+          </Link>
+        </nav>
       </div>
     </footer>
   );

@@ -71,3 +71,23 @@ Catat prompt penting selama membangun aplikasi: apa yang kamu minta, hasilnya, d
 **Prompt:** [SENDIRI] Implementasikan US-10 hapus produk dengan konfirmasi.
 **Hasil:** Menambahkan tombol hapus dengan konfirmasi dialog browser di tabel produk admin yang mengeksekusi Server Action `hapusProduk`.
 **Perbaikan:** Aksi hapus terlindungi sesi admin dan langsung memperbarui tampilan tabel setelah dihapus.
+
+### US-11, US-15, US-16 Filter, urutan, paginasi katalog
+**Prompt:** [SENDIRI] Kerjakan US-11, US-15, dan US-16 sekaligus di katalog publik.
+**Hasil:** Katalog punya pencarian nama, filter kategori, urutan termurah/termahal/terbaru, dan paginasi 12 produk per halaman. Semua diterapkan di query Supabase dan tersimpan di URL.
+**Perbaikan:** Karakter khusus pencarian di-escape agar query aman; halaman di luar batas diarahkan ke halaman terakhir.
+
+### US-12 dan US-26 Jumlah pesanan dan metadata produk
+**Prompt:** [SENDIRI] Kerjakan US-12 dan US-26 di halaman detail produk.
+**Hasil:** Pengunjung memilih jumlah 1–99; pesan WhatsApp memuat jumlah dan total harga. Halaman detail memakai `generateMetadata` dengan judul, deskripsi, dan Open Graph foto produk.
+**Perbaikan:** Menambahkan `metadataBase` di layout agar URL gambar Open Graph memakai domain asli.
+
+### US-22, US-27, US-28 Halaman Tentang, sitemap, loading
+**Prompt:** [SENDIRI] Kerjakan US-22, US-27, dan US-28.
+**Hasil:** Halaman `/tentang` berisi profil, alamat, jam buka, dan kontak WhatsApp, tertaut dari footer. `sitemap.xml` dibuat dari database, `robots.txt` menunjuk ke sitemap, dan ada skeleton `loading.jsx`.
+**Perbaikan:** `/admin/` dikecualikan dari robots.
+
+### US-30, US-33, US-35 Dashboard, cari admin, ekspor CSV
+**Prompt:** [SENDIRI] Kerjakan US-30, US-33, dan US-35 di halaman admin.
+**Hasil:** `/admin` menampilkan total produk dan jumlah per kategori, kolom cari dengan paginasi 20 per halaman di URL, serta tombol Ekspor CSV yang dibuat di server.
+**Perbaikan:** Endpoint ekspor memeriksa login sendiri (401 tanpa sesi) dan sel CSV di-escape termasuk perlindungan formula spreadsheet.

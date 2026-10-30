@@ -1,18 +1,41 @@
+import { cache } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import TombolWhatsApp from "@/components/TombolWhatsApp";
 import { formatRupiah } from "@/lib/format";
 import { supabasePublik } from "@/lib/supabase/server";
 
-export default async function HalamanDetailProduk({ params }) {
-  const { id } = await params;
-  const { data: produk, error } = await supabasePublik()
+const ambilProduk = cache(async (id) => {
+  const { data, error } = await supabasePublik()
     .from("produk")
     .select("id, nama, harga, deskripsi, foto_url, kategori")
     .eq("id", id)
     .maybeSingle();
+  return error ? null : data;
+});
 
-  if (error || !produk) {
+export async function generateMetadata({ params }) {
+  const { id } = await params;
+  const produk = await ambilProduk(id);
+  if (!produk) {
+    return { title: "Produk tidak ditemukan" };
+  }
+  return {
+    title: produk.nama,
+    description: produk.deskripsi,
+    openGraph: {
+      title: produk.nama,
+      description: produk.deskripsi,
+      images: produk.foto_url ? [produk.foto_url] : [],
+    },
+  };
+}
+
+export default async function HalamanDetailProduk({ params }) {
+  const { id } = await params;
+  const produk = await ambilProduk(id);
+
+  if (!produk) {
     notFound();
   }
 
