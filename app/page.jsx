@@ -1,5 +1,6 @@
 import FilterKatalog from "@/components/FilterKatalog";
 import KartuProduk from "@/components/KartuProduk";
+import KatalogTersimpan from "@/components/KatalogTersimpan";
 import Paginasi from "@/components/Paginasi";
 import { supabasePublik } from "@/lib/supabase/server";
 import { toko } from "@/lib/toko";
@@ -75,6 +76,8 @@ export default async function HalamanKatalog({ searchParams }) {
         <p className="mt-3 max-w-xl text-lg text-teks-lembut">{toko.tagline}</p>
         <p className="mt-4 text-sm text-teks-lembut">{toko.jamBuka}</p>
       </section>
+
+      <KatalogTersimpan mode="ringkasan" />
 
       <section aria-labelledby="judul-produk" className="flex flex-col gap-5">
         <h2 id="judul-produk" className="text-xl font-bold">

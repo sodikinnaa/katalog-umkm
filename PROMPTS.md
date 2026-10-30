@@ -101,3 +101,23 @@ Catat prompt penting selama membangun aplikasi: apa yang kamu minta, hasilnya, d
 **Prompt:** [SENDIRI] Kerjakan US-13 PWA.
 **Hasil:** Menambahkan web app manifest dengan ikon 192 dan 512 dari `public/icons`, tautan manifest, theme color, dan metadata Apple web app.
 **Perbaikan:** Memakai fitur bawaan Next.js `app/manifest.js` tanpa paket tambahan.
+
+### US-17 dan US-23 Produk terkait dan bagikan
+**Prompt:** [SENDIRI] Kerjakan produk terkait dan tombol bagikan di halaman detail.
+**Hasil:** Detail produk menampilkan maksimal empat produk dari kategori yang sama selain produk aktif. Tombol bagikan memakai Web Share API atau menyalin tautan.
+**Perbaikan:** Menampilkan status berhasil atau gagal secara aksesibel.
+
+### US-24 dan US-36 Favorit dan terakhir dilihat
+**Prompt:** [SENDIRI] Kerjakan favorit dan produk terakhir dilihat dengan penyimpanan browser.
+**Hasil:** Produk dapat ditambah atau dihapus dari favorit, halaman `/favorit` menampilkan pilihan, dan beranda menampilkan enam produk terakhir dilihat.
+**Perbaikan:** Data disimpan ringkas di localStorage dan perubahan disinkronkan lewat event browser.
+
+### US-25 Mode gelap
+**Prompt:** [SENDIRI] Kerjakan mode gelap yang tersimpan di browser.
+**Hasil:** Header memiliki tombol mode gelap/terang, pilihan tersimpan, dan seluruh token warna tetap terbaca.
+**Perbaikan:** Pilihan awal mengikuti preferensi sistem jika belum pernah disimpan.
+
+### US-49 Halaman kategori
+**Prompt:** [SENDIRI] Kerjakan halaman khusus per kategori dan tautkan kategori dari kartu produk.
+**Hasil:** `/kategori/[slug]` mengambil produk kategori secara server-side, kategori kosong menampilkan halaman tidak ditemukan, dan kategori pada kartu/detail tertaut.
+**Perbaikan:** Segmen kategori di-encode dan di-decode agar nama yang mengandung spasi tetap valid.

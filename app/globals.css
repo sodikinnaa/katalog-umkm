@@ -25,6 +25,53 @@
 html {
   color: var(--color-teks);
   background: var(--color-latar);
+  color-scheme: light;
+}
+
+html[data-theme="dark"] {
+  --color-latar: #101713;
+  --color-permukaan: #18231d;
+  --color-garis: #34473d;
+  --color-teks: #eef7f1;
+  --color-teks-lembut: #b3c5ba;
+  --color-utama: #76d9aa;
+  --color-utama-gelap: #1d6048;
+  --color-harga: #f4c875;
+  --color-harga-latar: #392d18;
+  --color-bahaya: #ff9288;
+  color-scheme: dark;
+}
+
+html[data-theme="dark"] .bg-utama {
+  background-color: #247557;
+}
+
+html[data-theme="dark"] .hover\:bg-utama-gelap:hover {
+  background-color: var(--color-utama-gelap);
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) {
+    --color-latar: #101713;
+    --color-permukaan: #18231d;
+    --color-garis: #34473d;
+    --color-teks: #eef7f1;
+    --color-teks-lembut: #b3c5ba;
+    --color-utama: #76d9aa;
+    --color-utama-gelap: #1d6048;
+    --color-harga: #f4c875;
+    --color-harga-latar: #392d18;
+    --color-bahaya: #ff9288;
+    color-scheme: dark;
+  }
+
+  html:not([data-theme]) .bg-utama {
+    background-color: #247557;
+  }
+
+  html:not([data-theme]) .hover\:bg-utama-gelap:hover {
+    background-color: var(--color-utama-gelap);
+  }
 }
 
 :focus-visible {
