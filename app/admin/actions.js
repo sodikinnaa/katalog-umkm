@@ -2,7 +2,9 @@
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { headers } from "next/headers";
 import { catatLog, pastikanAdminAktif } from "@/lib/admin/server";
+import { bolehKirim, kunciPengunjung } from "@/lib/rate-limit";
 import { supabaseSesi } from "@/lib/supabase/server";
 import { FOTO_CADANGAN } from "@/lib/produk";
 
@@ -23,6 +25,10 @@ export async function login(formData) {
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
   if (!email || !password) redirect("/admin/login?error=kosong");
+  const kunci = kunciPengunjung("login", await headers());
+  if (!(await bolehKirim({ jenis: "login", kunci, maks: 5, detik: 900 }))) {
+    redirect("/admin/login?error=terlalu-sering");
+  }
   const client = await supabaseSesi();
   const { error } = await client.auth.signInWithPassword({ email, password });
   if (error) redirect("/admin/login?error=salah");

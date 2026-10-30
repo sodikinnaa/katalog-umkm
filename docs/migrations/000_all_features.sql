@@ -1,4 +1,4 @@
--- Jalankan sekali di Supabase SQL Editor. Dibuat dari migration 001-009.
+-- Jalankan sekali di Supabase SQL Editor. Dibuat dari migration 001-010.
 
 
 -- 001_product_extensions.sql
@@ -598,7 +598,7 @@ create table if not exists public.batas_kiriman (
   jendela_mulai timestamptz not null,
   jumlah integer not null default 0,
   primary key (jenis, kunci, jendela_mulai),
-  constraint batas_kiriman_jenis_check check (jenis in ('ulasan', 'tanya_ai', 'klik_whatsapp')),
+  constraint batas_kiriman_jenis_check check (jenis in ('ulasan', 'tanya_ai', 'klik_whatsapp', 'login')),
   constraint batas_kiriman_kunci_check check (kunci ~ '^[a-f0-9]{32,128}$'),
   constraint batas_kiriman_jumlah_check check (jumlah >= 0)
 );
@@ -644,3 +644,9 @@ $$;
 revoke all on table public.batas_kiriman from anon, authenticated;
 revoke all on function public.ambil_jatah_kiriman(text, text, integer, integer) from public, anon, authenticated;
 grant execute on function public.ambil_jatah_kiriman(text, text, integer, integer) to service_role;
+
+
+-- 010_login_rate_limit.sql
+
+alter table public.batas_kiriman drop constraint if exists batas_kiriman_jenis_check;
+alter table public.batas_kiriman add constraint batas_kiriman_jenis_check check (jenis in ('ulasan', 'tanya_ai', 'klik_whatsapp', 'login'));

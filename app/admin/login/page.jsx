@@ -6,6 +6,7 @@ const pesanError = {
   kosong: "Email dan password wajib diisi.",
   salah: "Email atau password salah.",
   nonaktif: "Akun admin tidak aktif. Hubungi admin utama.",
+  "terlalu-sering": "Terlalu banyak percobaan masuk. Coba lagi dalam 15 menit.",
 };
 
 export default async function HalamanLogin({ searchParams }) {

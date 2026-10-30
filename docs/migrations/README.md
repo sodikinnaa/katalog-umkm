@@ -14,6 +14,7 @@ Migrasi ini melengkapi kebutuhan database US-18 sampai US-48 tanpa mengubah `doc
 8. `007_store_settings.sql`
 9. `008_admin_audit.sql`
 10. `009_rate_limits.sql`
+11. `010_login_rate_limit.sql`
 
 Jangan menjalankan file berikutnya jika file sebelumnya gagal. Migrasi tidak menghapus kolom atau data lama. Nilai baru untuk data produk lama: `stok = 10`, `aktif = true`, dan `urutan = 0`.
 

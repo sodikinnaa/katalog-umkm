@@ -1,47 +1,13 @@
-import { createHash } from "node:crypto";
 import { panggilAI, GalatAI } from "@/lib/ai/server";
 import { formatRupiah } from "@/lib/format";
+import { bolehKirim, kunciPengunjung } from "@/lib/rate-limit";
 import { supabasePublik } from "@/lib/supabase/server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const JENDELA_MS = 60_000;
-const BATAS_DB = 5;
-const BATAS_MEMORI = 3;
-const kiriman = globalThis.__rateLimitTanyaProduk ?? new Map();
-globalThis.__rateLimitTanyaProduk = kiriman;
-
 function jawab(status, body, headers) {
   return Response.json(body, { status, headers: { "Cache-Control": "no-store", ...headers } });
-}
-
-function kunciPengunjung(request) {
-  const ip =
-    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
-    request.headers.get("x-real-ip")?.trim() ||
-    "tanpa-ip";
-  return createHash("sha256").update(`tanya-produk:${ip}`).digest("hex");
-}
-
-function batasMemori(kunci) {
-  const sekarang = Date.now();
-  const daftar = (kiriman.get(kunci) ?? []).filter((waktu) => sekarang - waktu < JENDELA_MS);
-  if (daftar.length >= BATAS_MEMORI) return false;
-  daftar.push(sekarang);
-  kiriman.set(kunci, daftar);
-  if (kiriman.size > 5000) kiriman.delete(kiriman.keys().next().value);
-  return true;
-}
-
-async function bolehBertanya(kunci) {
-  const { data, error } = await supabasePublik().rpc("ambil_jatah_kiriman", {
-    p_jenis: "tanya_ai",
-    p_kunci: kunci,
-    p_maks: BATAS_DB,
-    p_detik: 60,
-  });
-  return error ? batasMemori(kunci) : Boolean(data);
 }
 
 export async function POST(request, { params }) {
@@ -60,7 +26,8 @@ export async function POST(request, { params }) {
     return jawab(400, { error: "Pertanyaan harus terdiri dari 3 sampai 300 karakter." });
   }
 
-  if (!(await bolehBertanya(kunciPengunjung(request)))) {
+  const kunci = kunciPengunjung("tanya-produk", request.headers);
+  if (!(await bolehKirim({ jenis: "tanya_ai", kunci, maks: 5, detik: 60 }))) {
     return jawab(429, { error: "Terlalu banyak pertanyaan. Silakan coba lagi dalam 1 menit." }, { "Retry-After": "60" });
   }
 

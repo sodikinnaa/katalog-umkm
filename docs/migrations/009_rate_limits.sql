@@ -5,7 +5,7 @@ create table if not exists public.batas_kiriman (
   jendela_mulai timestamptz not null,
   jumlah integer not null default 0,
   primary key (jenis, kunci, jendela_mulai),
-  constraint batas_kiriman_jenis_check check (jenis in ('ulasan', 'tanya_ai', 'klik_whatsapp')),
+  constraint batas_kiriman_jenis_check check (jenis in ('ulasan', 'tanya_ai', 'klik_whatsapp', 'login')),
   constraint batas_kiriman_kunci_check check (kunci ~ '^[a-f0-9]{32,128}$'),
   constraint batas_kiriman_jumlah_check check (jumlah >= 0)
 );
