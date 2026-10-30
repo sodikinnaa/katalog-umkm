@@ -87,7 +87,7 @@ export default async function HalamanDetailProduk({ params, searchParams }) {
           ) : varian && varian.length > 0 ? (
             <PilihVarian produk={produkPilihan} daftarVarian={varian} stok={produk.stok} nomorWhatsApp={pengaturan.nomorWhatsApp} />
           ) : (
-            <TombolWhatsApp produk={produkPilihan} />
+            <TombolWhatsApp produk={produkPilihan} nomorWhatsApp={pengaturan.nomorWhatsApp} />
           )}
           <div className="flex flex-wrap items-start gap-3">
             {!habis && <TombolKeranjang produk={produkPilihan} />}
