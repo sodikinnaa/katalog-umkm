@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { formatRupiah } from "@/lib/format";
+import { toko } from "@/lib/toko";
 import { catatKlikWhatsApp, tautanWhatsApp, teksPesanVarian } from "@/lib/varian";
 
 const MIN = 1;
@@ -44,7 +45,8 @@ export default function PilihVarian({
   }, [varian, harga, habis, jumlah, maksJumlah]);
 
   const pesan = teksPesanVarian({ produk, varian, jumlah });
-  const tautan = tautanWhatsApp(pesan, nomorWhatsApp);
+  const nomorTujuan = nomorWhatsApp || toko.nomorWhatsApp;
+  const tautan = tautanWhatsApp(pesan, nomorTujuan);
   const kelasTombolJumlah =
     "flex h-11 w-11 items-center justify-center rounded-lg border border-garis text-lg font-bold hover:bg-permukaan disabled:opacity-40";
 

@@ -84,10 +84,13 @@ export default async function HalamanDetailProduk({ params, searchParams }) {
           <p className="max-w-prose leading-relaxed text-teks-lembut">{produk.deskripsi}</p>
           {habis ? (
             <p className="self-start rounded-lg bg-permukaan px-4 py-3 font-bold text-bahaya">Habis</p>
-          ) : varian && varian.length > 0 ? (
-            <PilihVarian produk={produkPilihan} daftarVarian={varian} stok={produk.stok} nomorWhatsApp={pengaturan.nomorWhatsApp} />
           ) : (
-            <TombolWhatsApp produk={produkPilihan} />
+            <>
+              {varian && varian.length > 0 ? (
+                <PilihVarian produk={produkPilihan} daftarVarian={varian} stok={produk.stok} nomorWhatsApp={pengaturan.nomorWhatsApp} />
+              ) : null}
+              <TombolWhatsApp produk={produkPilihan} />
+            </>
           )}
           <div className="flex flex-wrap items-start gap-3">
             {!habis && <TombolKeranjang produk={produkPilihan} />}
