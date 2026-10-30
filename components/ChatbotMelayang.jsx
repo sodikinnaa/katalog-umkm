@@ -72,13 +72,13 @@ export default function ChatbotMelayang() {
   }
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 sm:bottom-6 sm:right-6">
+    <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end pointer-events-none sm:bottom-6 sm:right-6">
       {terbuka && (
         <section
           role="dialog"
           aria-modal="false"
           aria-labelledby="judul-chatbot"
-          className="mb-3 flex h-[min(32rem,calc(100vh-7rem))] w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-garis bg-latar shadow-2xl sm:ml-auto"
+          className="pointer-events-auto mb-3 flex h-[min(32rem,calc(100vh-7rem))] w-[calc(100vw-2rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-garis bg-latar shadow-2xl"
         >
           <header className="flex items-center justify-between gap-3 bg-utama px-4 py-3 text-white">
             <div>
@@ -164,7 +164,7 @@ export default function ChatbotMelayang() {
         onClick={() => setTerbuka((nilai) => !nilai)}
         aria-label={terbuka ? "Tutup asisten toko" : "Buka asisten toko"}
         aria-expanded={terbuka}
-        className="flex h-14 w-14 items-center justify-center rounded-full bg-utama text-white shadow-xl transition-transform hover:scale-105 hover:bg-utama-gelap focus:outline-none focus:ring-4 focus:ring-utama/30"
+        className="pointer-events-auto flex h-14 w-14 items-center justify-center rounded-full bg-utama text-white shadow-xl transition-transform hover:scale-105 hover:bg-utama-gelap focus:outline-none focus:ring-4 focus:ring-utama/30"
       >
         {terbuka ? <span aria-hidden="true" className="text-2xl">×</span> : <IkonRobot />}
       </button>
