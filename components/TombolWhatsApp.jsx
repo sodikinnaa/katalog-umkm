@@ -1,20 +1,16 @@
-"use client";
-
-import { formatRupiah } from "@/lib/format";
 import { toko } from "@/lib/toko";
-import { catatKlikWhatsApp } from "@/lib/varian";
+import { formatRupiah } from "@/lib/format";
 
 export default function TombolWhatsApp({ produk }) {
-  const harga = formatRupiah(produk.harga);
-  const pesan = `Halo, saya mau pesan ${produk.nama} (${harga})`;
-  const tautan = `https://wa.me/${toko.nomorWhatsApp}?text=${encodeURIComponent(pesan)}`;
+  const nomor = toko.nomorWhatsApp;
+  const pesan = `Halo, saya ingin memesan ${produk.nama} seharga ${formatRupiah(produk.harga)}.`;
+  const url = `https://wa.me/${nomor}?text=${encodeURIComponent(pesan)}`;
 
   return (
     <a
-      href={tautan}
+      href={url}
       target="_blank"
-      rel="noreferrer"
-      onClick={() => catatKlikWhatsApp(produk.id)}
+      rel="noopener noreferrer"
       className="inline-flex w-full items-center justify-center rounded-lg bg-utama px-5 py-3 font-semibold text-white hover:bg-utama-gelap sm:w-auto"
     >
       Pesan via WhatsApp
