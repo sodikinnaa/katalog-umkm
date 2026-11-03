@@ -81,6 +81,9 @@ export default async function HalamanDetailProduk({ params, searchParams }) {
           {produk.badge && <span className="self-start rounded-full bg-utama px-3 py-1 text-xs font-bold text-white">{produk.badge}</span>}
           <h1 className="text-3xl font-extrabold leading-tight tracking-tight">{produk.nama}</h1>
           {produk.harga_diskon != null && <s className="text-teks-lembut">{formatRupiah(produk.harga)}</s>}
+          <p className="self-start rounded-md bg-harga-latar px-3 py-1 text-xl font-bold text-harga">
+            {formatRupiah(hargaAktif)}
+          </p>
           <p className="max-w-prose leading-relaxed text-teks-lembut">{produk.deskripsi}</p>
           {habis ? (
             <p className="self-start rounded-lg bg-permukaan px-4 py-3 font-bold text-bahaya">Habis</p>
