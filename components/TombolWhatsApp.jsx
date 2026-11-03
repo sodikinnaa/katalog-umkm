@@ -1,5 +1,8 @@
+"use client";
+
 import { toko } from "@/lib/toko";
 import { formatRupiah } from "@/lib/format";
+import { catatKlikWhatsApp } from "@/lib/varian";
 
 export default function TombolWhatsApp({ produk }) {
   const nomor = toko.nomorWhatsApp;
@@ -11,6 +14,7 @@ export default function TombolWhatsApp({ produk }) {
       href={url}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={() => catatKlikWhatsApp(produk.id)}
       className="inline-flex w-full items-center justify-center rounded-lg bg-utama px-5 py-3 font-semibold text-white hover:bg-utama-gelap sm:w-auto"
     >
       Pesan via WhatsApp
