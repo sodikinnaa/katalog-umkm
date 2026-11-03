@@ -13,7 +13,6 @@ import TombolFavorit from "@/components/TombolFavorit";
 import TombolKeranjang from "@/components/TombolKeranjang";
 import UlasanProduk from "@/components/UlasanProduk";
 import { formatRupiah } from "@/lib/format";
-import { ambilPengaturanToko } from "@/lib/pengaturan-toko";
 import { ambilProdukPublik, hargaProduk, produkHabis } from "@/lib/produk";
 import { supabasePublik } from "@/lib/supabase/server";
 import { ambilVarianAktif } from "@/lib/varian";
@@ -55,10 +54,9 @@ export default async function HalamanDetailProduk({ params, searchParams }) {
   const { produk, foto } = await ambilProduk(id);
   if (!produk) notFound();
 
-  const [produkTerkait, varian, pengaturan] = await Promise.all([
+  const [produkTerkait, varian] = await Promise.all([
     ambilProdukTerkait(produk),
     ambilVarianAktif(supabasePublik(), produk.id),
-    ambilPengaturanToko(),
   ]);
   const hargaAktif = hargaProduk(produk);
   const produkPilihan = { ...produk, harga: hargaAktif };
@@ -88,7 +86,7 @@ export default async function HalamanDetailProduk({ params, searchParams }) {
           {habis ? (
             <p className="self-start rounded-lg bg-permukaan px-4 py-3 font-bold text-bahaya">Habis</p>
           ) : varian && varian.length > 0 ? (
-            <PilihVarian produk={produkPilihan} daftarVarian={varian} stok={produk.stok} nomorWhatsApp={pengaturan.nomorWhatsApp} />
+            <PilihVarian produk={produkPilihan} daftarVarian={varian} stok={produk.stok} />
           ) : (
             <TombolWhatsApp produk={produkPilihan} />
           )}

@@ -21,7 +21,6 @@ export default function PilihVarian({
   stock,
   onPilih,
   onSelect,
-  nomorWhatsApp,
 }) {
   const produk = produkProp ?? product;
   const stok = stokProp ?? stock;
@@ -45,8 +44,7 @@ export default function PilihVarian({
   }, [varian, harga, habis, jumlah, maksJumlah]);
 
   const pesan = teksPesanVarian({ produk, varian, jumlah });
-  const nomorTujuan = nomorWhatsApp || toko.nomorWhatsApp;
-  const tautan = tautanWhatsApp(pesan, nomorTujuan);
+  const tautan = tautanWhatsApp(pesan, toko.nomorWhatsApp);
   const kelasTombolJumlah =
     "flex h-11 w-11 items-center justify-center rounded-lg border border-garis text-lg font-bold hover:bg-permukaan disabled:opacity-40";
 
